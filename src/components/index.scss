@@ -11,10 +11,10 @@
     .ground_snake {
         position: absolute;
         width: fit-content;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: row-reverse;
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
+        // flex-direction: row-reverse;
         z-index: 2;
         // transition: all 700ms ease-in-out;
 
@@ -23,7 +23,7 @@
             display: flex;
             width: 30px;
             height: 30px;
-            background-color: var(--snake_head);
+            background-color: var(--snake);
             border-radius: 12px;
         }
 
@@ -99,6 +99,56 @@
     justify-content: flex-start;
     background-color: white;
 
+    .player {
+        width: 100%;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+
+        .player_label {
+            font-size: 34px;
+        }
+
+        .player_name {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 26px;
+            color: var(--name);
+        }
+
+        .player_form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .player_input {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 18px;
+            padding: 6px 8px;
+            font-weight: 700;
+            color: var(--snake);
+        }
+
+        .player_btn {
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px 12px;
+            border: none;
+            outline: none;
+            border-radius: 8px;
+            background-color: var(--snake);
+            color: white;
+            font-weight: 600;
+        }
+
+    }
+
     .score {
         width: 100%;
         margin-top: 20px;
@@ -141,6 +191,7 @@
 }
 
 .highscore {
+    position: relative;
     width: 100%;
     margin-top: 40px;
     display: flex;
@@ -149,21 +200,29 @@
     justify-content: center;
 
     .label {
+        display: flex;
         font-size: 34px;
+        position: relative;
+        margin-bottom: 20px;
     }
 
     .list {
+        margin-block-start: 0em;
+        margin-block-end: 0em;
+        position: relative;
+        height: 530px;
         width: calc(100% - 40px);
         padding: 0px 20px;
         display: flex;
         align-items: flex-start;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
+        overflow-y: scroll;
         color: var(--border);
 
         .item {
             width: 100%;
-            height: 30px;
+            line-height: 30px;
             font-weight: 400;
             font-size: 18px;
             list-style-type: none;

@@ -5,9 +5,10 @@ import { FaRegPlayCircle } from "react-icons/fa";
 import { FaRegPauseCircle } from "react-icons/fa";
 //@ts-ignore
 import ArrowKeysReact from "arrow-keys-react";
-import { scoreAtom, speedAtom } from "../state";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import Tail from "./Tail";
+import { gameStatusAtom, scoreAtom, speedAtom, userAtom } from "../state";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { toast } from "react-toastify";
+// import Tail from "./Tail";
 
 export enum Directions {
   up = "up",
@@ -25,19 +26,50 @@ const Ground = () => {
   const [marginTop, setMarginTop] = useState<number>(30);
   const [marginLeft, setMarginLeft] = useState<number>(30);
   const [game, setGame] = useState<boolean>(false);
-  const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [isGameOver, setIsGameOver] = useRecoilState<boolean>(
+    gameStatusAtom || false
+  );
   const [direction, setDirection] = useState<Directions>(Directions.right);
   const speed = useRecoilValue(speedAtom);
-  const setScore = useSetRecoilState(scoreAtom);
+  const [score, setScore] = useRecoilState(scoreAtom);
+  const player = useRecoilValue(userAtom);
   const [tail, setTail] = useState<ITail[]>([]);
   const [snakeScale, setSnakeScale] = useState<number>(1);
+  let groundRef = useRef(null);
 
   const [appleMargins, setAppleMargins] = useState({
     left: 150,
     top: 150,
   });
 
-  let groundRef = useRef(null);
+  // checking weather username is exists or not
+
+  const onGameHandler = useCallback(() => {
+    if (player.name !== "") {
+      setGame((prev) => !prev);
+    } else {
+      toast.error("Please Add Your Name");
+    }
+  }, [player]);
+
+  //Adding New Score in Database
+
+  useEffect(() => {
+    const updateScore = async () => {
+      await fetch(`/api/score/update`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: player.name,
+          speed: speed,
+          score: score,
+        }),
+      });
+    };
+
+    if (isGameOver && score > 0) {
+      updateScore();
+    }
+  }, [isGameOver, score]);
 
   //Getting outside click of ground
   useEffect(() => {
@@ -162,6 +194,7 @@ const Ground = () => {
           setMarginTop(30);
           setIsGameOver(false);
           setDirection(Directions.right);
+          setScore(0);
         }
       }
     };
@@ -206,7 +239,7 @@ const Ground = () => {
         <i className="snake_tail" />
         <i className="snake_tail" /> */}
         </div>
-        {tail.map((item: ITail, index: number) => {
+        {/* {tail.map((item: ITail, index: number) => {
           return (
             <Tail
               direction={direction}
@@ -217,12 +250,9 @@ const Ground = () => {
               key={index}
             />
           );
-        })}
+        })} */}
 
-        <div
-          className="ground_buttons"
-          onClick={() => setGame((prev) => !prev)}
-        >
+        <div className="ground_buttons" onClick={onGameHandler}>
           {isGameOver && <span>Game Over</span>}
           {!game && !isGameOver && <span>Play</span>}
           {game ? (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Days_One } from "next/font/google";
 import "./globals.scss";
+import "react-toastify/dist/ReactToastify.css";
 
 const days = Days_One({ weight: "400", subsets: ["latin"] });
 
@@ -16,9 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      
-        <body className={days.className}>{children}</body>
-      
+      <body className={days.className}>{children}</body>
     </html>
   );
 }
