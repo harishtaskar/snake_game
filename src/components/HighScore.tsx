@@ -40,7 +40,7 @@ const HighScore = () => {
         <ul className="list">
           {scorelist?.map((item: Score, index: number) => {
             return (
-              <li className="item">
+              <li className="item" key={index}>
                 <div className="div">
                   <span className="rank">{index + 1}</span>
                   <span className="name">{item.name}</span>

@@ -56,6 +56,7 @@ const Tail = ({ tail, speed, marginTop, marginLeft, direction }: Props) => {
 
     return (
       <div
+        key={index}
         className="ground_snake"
         style={{
           marginTop: topmargin,
