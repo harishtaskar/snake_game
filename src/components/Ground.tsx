@@ -45,11 +45,11 @@ const Ground = () => {
   // checking weather username is exists or not
 
   const onGameHandler = useCallback(() => {
-    if (player.name !== "") {
-      setGame((prev) => !prev);
-    } else {
-      toast.error("Please Add Your Name");
-    }
+    setGame((prev) => !prev);
+    // if (player.name !== "") {
+    // } else {
+    //   toast.error("Please Add Your Name");
+    // }
   }, [player]);
 
   //Adding New Score in Database
