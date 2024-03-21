@@ -10,8 +10,6 @@ export const POST = async (req: NextRequest) => {
   try {
     await connectToDB();
     const user = await Score.find({ name: name });
-    console.log(user);
-    console.log(name);
 
     if (score > user[0].score) {
       const update = await Score.findOneAndUpdate(

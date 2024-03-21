@@ -4,7 +4,7 @@ let isConnected = false;
 
 export const connectToDB = async () => {
   //@ts-ignore
-  mongoose.set("strictQuery");
+  mongoose.set("strictQuery", true);
   if (isConnected) {
     return;
   }
