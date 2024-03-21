@@ -17,4 +17,3 @@ export const GET = async (request: NextRequest, response: NextResponse) => {
   }
 };
 
-export const runtime = "edge";
