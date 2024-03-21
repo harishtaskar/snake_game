@@ -9,8 +9,6 @@ export const connectToDB = async () => {
     return;
   }
 
-  console.log(process.env.MONGODB_URL);
-
   try {
     await mongoose.connect(process.env.MONGODB_URL || "", {
       dbName: "snake_game",

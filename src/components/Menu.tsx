@@ -5,6 +5,7 @@ import { Speed, speedAtom, scoreAtom, userAtom, User } from "../state";
 import HighScore from "./HighScore";
 import { toast } from "react-toastify";
 
+
 type Props = {};
 
 const Menu = ({}: Props) => {
@@ -43,22 +44,24 @@ const Menu = ({}: Props) => {
   );
 
   const addPlayerHandler = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
+    (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      const response = await fetch(`/api/score/new`, {
-        method: "POST",
-        body: JSON.stringify({
-          name: user,
-          speed: "slow",
-        }),
-      });
-      const data: any = await response.json();
-      if (data.res === "ok") {
-        setPlayer(data.user);
-        localStorage.setItem("user", JSON.stringify(data.user));
-      } else {
-        toast.error(data.msg);
-      }
+      setTimeout(async () => {
+        const response = await fetch(`/api/score/new`, {
+          method: "POST",
+          body: JSON.stringify({
+            name: user,
+            speed: "slow",
+          }),
+        });
+        const data: any = await response.json();
+        if (data.res === "ok") {
+          setPlayer(data.user);
+          localStorage.setItem("user", JSON.stringify(data.user));
+        } else {
+          toast.error(data.msg);
+        }
+      }, 1000);
     },
     [user]
   );

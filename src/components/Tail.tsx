@@ -13,6 +13,7 @@ const Tail = ({ tail, speed, marginTop, marginLeft, direction }: Props) => {
   return tail.map((item: ITail, index: number) => {
     let topmargin = marginTop;
     let leftmargin = marginLeft;
+    // let delay = speed * (index + 1);
 
     if (direction === "right") {
       leftmargin = marginLeft - index * 30;

@@ -1,5 +1,11 @@
 "use client";
-import React, { Ref, useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import "./index.scss";
 import { FaRegPlayCircle } from "react-icons/fa";
 import { FaRegPauseCircle } from "react-icons/fa";
@@ -8,6 +14,15 @@ import ArrowKeysReact from "arrow-keys-react";
 import { gameStatusAtom, scoreAtom, speedAtom, userAtom } from "../state";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { toast } from "react-toastify";
+import Tail from "./Tail";
+import {
+  appleHeight,
+  appleWidth,
+  canvasHeight,
+  canvasWidth,
+  snakeHeight,
+  snakeWidth,
+} from "@/config";
 // import Tail from "./Tail";
 
 export enum Directions {
@@ -23,8 +38,8 @@ export interface ITail {
 }
 
 const Ground = () => {
-  const [marginTop, setMarginTop] = useState<number>(30);
-  const [marginLeft, setMarginLeft] = useState<number>(30);
+  const [marginTop, setMarginTop] = useState<number>(20);
+  const [marginLeft, setMarginLeft] = useState<number>(20);
   const [game, setGame] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useRecoilState<boolean>(
     gameStatusAtom || false
@@ -38,8 +53,8 @@ const Ground = () => {
   let groundRef = useRef(null);
 
   const [appleMargins, setAppleMargins] = useState({
-    left: 150,
-    top: 150,
+    left: 100,
+    top: 100,
   });
 
   // checking weather username is exists or not
@@ -52,6 +67,19 @@ const Ground = () => {
     // }
   }, [player]);
 
+  const speedCalc: string = useMemo(() => {
+    switch (speed) {
+      case 50:
+        return "super_fast";
+      case 100:
+        return "fast";
+      case 150:
+        return "medium";
+      default:
+        return "slow";
+    }
+  }, [speed]);
+
   //Adding New Score in Database
 
   useEffect(() => {
@@ -60,7 +88,7 @@ const Ground = () => {
         method: "POST",
         body: JSON.stringify({
           name: player.name,
-          speed: speed,
+          speed: speedCalc,
           score: score,
         }),
       });
@@ -92,8 +120,10 @@ const Ground = () => {
 
   //Getting Random position for apple
   function getRandomValues(): number[] {
-    const left: number = Math.floor(Math.random() * (1170 / 30 - 1) + 1) * 30;
-    const top: number = Math.floor(Math.random() * (870 / 30 - 1) + 1) * 30;
+    const left: number =
+      Math.floor(Math.random() * (canvasWidth / snakeWidth - 1) + 1) * 20;
+    const top: number =
+      Math.floor(Math.random() * (canvasHeight / snakeHeight - 1) + 1) * 20;
     return [left, top];
   }
 
@@ -134,25 +164,25 @@ const Ground = () => {
       switch (direction) {
         case "right":
           setMarginLeft((prev) => {
-            if (prev >= 1170) {
+            if (prev >= canvasWidth - snakeWidth) {
               setIsGameOver(true);
               setGame(false);
               clearInterval(interval);
               return prev;
             } else {
-              return prev + 30;
+              return prev + snakeWidth;
             }
           });
           break;
         case "down":
           setMarginTop((prev) => {
-            if (prev >= 870) {
+            if (prev >= canvasHeight - snakeHeight) {
               setIsGameOver(true);
               setGame(false);
               clearInterval(interval);
               return prev;
             } else {
-              return prev + 30;
+              return prev + snakeHeight;
             }
           });
           break;
@@ -164,7 +194,7 @@ const Ground = () => {
               clearInterval(interval);
               return prev;
             } else {
-              return prev - 30;
+              return prev - snakeWidth;
             }
           });
           break;
@@ -176,7 +206,7 @@ const Ground = () => {
               clearInterval(interval);
               return prev;
             } else {
-              return prev - 30;
+              return prev - snakeHeight;
             }
           });
           break;
@@ -190,15 +220,15 @@ const Ground = () => {
       if (game) {
         clearInterval(interval);
         if (isGameOver) {
-          setMarginLeft(30);
-          setMarginTop(30);
+          setMarginLeft(snakeWidth);
+          setMarginTop(snakeHeight);
           setIsGameOver(false);
           setDirection(Directions.right);
           setScore(0);
         }
       }
     };
-  }, [game, direction]);
+  }, [game, direction, tail]);
 
   //Check if both Snake and apple get intersact
   if (appleMargins.left === marginLeft) {
@@ -224,22 +254,27 @@ const Ground = () => {
         {...ArrowKeysReact.events}
         tabIndex={"1"}
         ref={groundRef}
+        style={{ width: canvasWidth, height: canvasHeight }}
       >
         <div
           className="ground_snake"
           style={{
+            width: snakeWidth,
+            height: snakeHeight,
             marginTop: marginTop,
             marginLeft: marginLeft,
             scale: snakeScale,
           }}
         >
-          <i className="snake_head" />
-
-          {/* <i className="snake_tail" />
-        <i className="snake_tail" />
-        <i className="snake_tail" /> */}
+          <i
+            className="snake_head"
+            style={{
+              width: snakeWidth,
+              height: snakeHeight,
+            }}
+          />
         </div>
-        {/* {tail.map((item: ITail, index: number) => {
+        {tail.map((item: ITail, index: number) => {
           return (
             <Tail
               direction={direction}
@@ -250,7 +285,7 @@ const Ground = () => {
               key={index}
             />
           );
-        })} */}
+        })}
 
         <div className="ground_buttons" onClick={onGameHandler}>
           {isGameOver && <span>Game Over</span>}
@@ -271,7 +306,13 @@ const Ground = () => {
             marginLeft: appleMargins.left,
           }}
         >
-          <i className="apple" />
+          <i
+            className="apple"
+            style={{
+              width: appleWidth,
+              height: appleHeight,
+            }}
+          />
         </div>
       </div>
     </div>

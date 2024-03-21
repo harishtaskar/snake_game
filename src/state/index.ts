@@ -1,9 +1,9 @@
 import { atom } from "recoil";
 
 export enum Speed {
-  slow = 240,
-  medium = 160,
-  fast = 90,
+  slow = 200,
+  medium = 150,
+  fast = 100,
   super_fast = 50,
 }
 
