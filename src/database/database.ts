@@ -1,3 +1,4 @@
+import { mongourl } from "@/app/page";
 import mongoose from "mongoose";
 
 let isConnected = false;
@@ -10,7 +11,7 @@ export const connectToDB = async () => {
   }
 
   try {
-    await mongoose.connect(process.env.MONGODB_URL || "", {
+    await mongoose.connect(mongourl, {
       dbName: "snake_game",
     });
     isConnected = true;

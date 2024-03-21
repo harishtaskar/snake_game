@@ -5,6 +5,8 @@ import Menu from "../components/Menu";
 import styles from "./page.module.scss";
 import { ToastContainer, Slide } from "react-toastify";
 
+export const mongourl = process.env.NEXT_PUBLIC_MONGODB_URL || "";
+
 export default function Home() {
   return (
     <main className={styles.main}>
