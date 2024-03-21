@@ -2,6 +2,8 @@ import Score from "@/modals/Score";
 import { connectToDB } from "@/database/database";
 import { NextRequest, NextResponse } from "next/server";
 
+export const maxDuration = 20;
+
 export const GET = async (request: NextRequest, response: NextResponse) => {
   try {
     await connectToDB();

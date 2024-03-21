@@ -2,6 +2,8 @@ import Score from "@/modals/Score";
 import { connectToDB } from "@/database/database";
 import { NextRequest } from "next/server";
 
+export const maxDuration = 20;
+
 export const POST = async (req: NextRequest) => {
   const { name, speed } = await req.json();
 
