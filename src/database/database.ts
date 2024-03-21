@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-export const mongourl = process.env.NEXT_PUBLIC_MONGODB_URL || "";
+export const mongourl =
+  "mongodb+srv://harishtaskar001:fuFzEzGOSpsRYyZl@modernnest.u72zrk9.mongodb.net/?retryWrites=true&w=majority";
 
 let isConnected = false;
 
