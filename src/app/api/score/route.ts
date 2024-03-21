@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export const GET = async (request: NextRequest, response: NextResponse) => {
+  return new Response(JSON.stringify("scores"), { status: 200 });
+
   try {
     await connectToDB();
     const scores = await Score.find({}).sort({ score: -1 });
@@ -16,4 +18,3 @@ export const GET = async (request: NextRequest, response: NextResponse) => {
     });
   }
 };
-
