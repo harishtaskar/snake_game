@@ -2,11 +2,11 @@ import Score from "@/modals/Score";
 import { connectToDB } from "@/database/database";
 import { NextRequest, NextResponse } from "next/server";
 
-export const maxDuration = 20;
+export const maxDuration = 10;
 
 export const GET = async (request: NextRequest, response: NextResponse) => {
   try {
-    await connectToDB();
+    connectToDB();
     const scores = await Score.find({}).sort({ score: -1 });
 
     return new Response(JSON.stringify(scores), { status: 200 });

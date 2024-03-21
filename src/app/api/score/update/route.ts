@@ -2,14 +2,14 @@ import Score from "@/modals/Score";
 import { connectToDB } from "@/database/database";
 import { NextRequest } from "next/server";
 
-export const maxDuration = 20;
+export const maxDuration = 10;
 
 
 export const POST = async (req: NextRequest) => {
   const { name, score, speed } = await req.json();
 
   try {
-    await connectToDB();
+    connectToDB();
     const user = await Score.find({ name: name });
     console.log(user);
     console.log(name);
