@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
-export const mongourl =
-  "mongodb+srv://harishtaskar001:fuFzEzGOSpsRYyZl@modernnest.u72zrk9.mongodb.net/?retryWrites=true&w=majority";
+export const mongourl = process.env.NEXT_PUBLIC_MONGODB_URL || "";
 
 let isConnected = false;
 
@@ -17,7 +16,6 @@ export const connectToDB = async () => {
       dbName: "snake_game",
     });
     isConnected = true;
-    console.log("mongoDB is Connected", process.env.MONGODB_URL);
   } catch (error: any) {
     console.log(error.message);
   }
