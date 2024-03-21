@@ -2,14 +2,13 @@ import Score from "@/modals/Score";
 import { connectToDB } from "@/database/database";
 import { NextRequest } from "next/server";
 
-export const maxDuration = 10;
-
+export const dynamic = "force-dynamic";
 
 export const POST = async (req: NextRequest) => {
   const { name, score, speed } = await req.json();
 
   try {
-    connectToDB();
+    await connectToDB();
     const user = await Score.find({ name: name });
     console.log(user);
     console.log(name);
@@ -29,3 +28,6 @@ export const POST = async (req: NextRequest) => {
     return new Response("Failed to create new prompt", { status: 500 });
   }
 };
+
+export const runtime = "edge";
+

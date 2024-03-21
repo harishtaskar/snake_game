@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 let isConnected = false;
 
-export const connectToDB = () => {
+export const connectToDB = async () => {
   //@ts-ignore
   mongoose.set("strictQuery");
   if (isConnected) {
@@ -10,7 +10,7 @@ export const connectToDB = () => {
   }
 
   try {
-    mongoose.connect(process.env.MONGODB_URL || "", {
+    await mongoose.connect(process.env.MONGODB_URL || "", {
       dbName: "snake_game",
     });
     isConnected = true;

@@ -2,14 +2,14 @@ import Score from "@/modals/Score";
 import { connectToDB } from "@/database/database";
 import { NextRequest } from "next/server";
 
-export const maxDuration = 10;
+export const dynamic = "force-dynamic";
 
 export const POST = async (req: NextRequest) => {
   const { name, speed } = await req.json();
 
   const userExists = async (name: string) => {
     let output = false;
-    connectToDB();
+    await connectToDB();
     const user = await Score.find({ name: name });
     if (user.length > 0) {
       output = true;
@@ -18,7 +18,7 @@ export const POST = async (req: NextRequest) => {
   };
 
   try {
-    connectToDB();
+    await connectToDB();
 
     if (await userExists(name)) {
       return new Response(
@@ -40,3 +40,5 @@ export const POST = async (req: NextRequest) => {
     return new Response(`${error} Failed to create new user`, { status: 500 });
   }
 };
+
+export const runtime = "edge";
