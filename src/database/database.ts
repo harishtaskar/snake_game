@@ -1,5 +1,6 @@
-import { mongourl } from "@/app/page";
 import mongoose from "mongoose";
+
+export const mongourl = process.env.NEXT_PUBLIC_MONGODB_URL || "";
 
 let isConnected = false;
 
