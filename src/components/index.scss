@@ -118,6 +118,7 @@
         }
 
         .player_name {
+            text-transform: capitalize;
             text-align: center;
             font-size: 22px;
             color: var(--name);

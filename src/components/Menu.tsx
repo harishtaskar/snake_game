@@ -53,7 +53,7 @@ const Menu = ({}: Props) => {
             "Content-type": "application/json",
           },
           body: JSON.stringify({
-            name: user,
+            name: user.toLowerCase().trim(),
             speed: "slow",
           }),
         });
