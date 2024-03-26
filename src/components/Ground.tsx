@@ -69,11 +69,11 @@ const Ground = () => {
   // checking weather username is exists or not
 
   const onGameHandler = useCallback(() => {
-    setGame((prev) => !prev);
-    // if (player.name !== "") {
-    // } else {
-    //   toast.error("Please Add Your Name");
-    // }
+    if (player.name !== "") {
+      setGame((prev) => !prev);
+    } else {
+      toast.error("Please Add Your Name");
+    }
   }, [player]);
 
   const speedCalc: string = useMemo(() => {
