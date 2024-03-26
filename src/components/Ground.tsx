@@ -11,11 +11,18 @@ import { FaRegPlayCircle } from "react-icons/fa";
 import { FaRegPauseCircle } from "react-icons/fa";
 //@ts-ignore
 import ArrowKeysReact from "arrow-keys-react";
-import { gameStatusAtom, scoreAtom, speedAtom, userAtom } from "../state";
+import {
+  Speed,
+  gameStatusAtom,
+  scoreAtom,
+  speedAtom,
+  userAtom,
+} from "../state";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { toast } from "react-toastify";
-import Tail from "./Tail";
+import Snake from "./Snake";
 import {
+  PORT,
   appleHeight,
   appleWidth,
   canvasHeight,
@@ -23,7 +30,7 @@ import {
   snakeHeight,
   snakeWidth,
 } from "@/config";
-// import Tail from "./Tail";
+// import snake from "./snake";
 
 export enum Directions {
   up = "up",
@@ -32,7 +39,7 @@ export enum Directions {
   left = "left",
 }
 
-export interface ITail {
+export interface ISnake {
   left: number;
   top: number;
 }
@@ -48,7 +55,9 @@ const Ground = () => {
   const speed = useRecoilValue(speedAtom);
   const [score, setScore] = useRecoilState(scoreAtom);
   const player = useRecoilValue(userAtom);
-  const [tail, setTail] = useState<ITail[]>([]);
+  const [snake, setSnake] = useState<ISnake[]>([
+    { left: marginLeft, top: marginTop },
+  ]);
   const [snakeScale, setSnakeScale] = useState<number>(1);
   let groundRef = useRef(null);
 
@@ -84,8 +93,11 @@ const Ground = () => {
 
   useEffect(() => {
     const updateScore = async () => {
-      await fetch(`/api/score/update`, {
+      await fetch(`${PORT}/score/update`, {
         method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
         body: JSON.stringify({
           name: player.name,
           speed: speedCalc,
@@ -155,6 +167,25 @@ const Ground = () => {
     },
   });
 
+  const speedIncreaser = useMemo(() => {
+    let increaser;
+    switch (speed) {
+      case 50:
+        increaser = score / Speed.slow;
+        break;
+      case 100:
+        increaser = score / Speed.fast;
+        break;
+      case 150:
+        increaser = score / Speed.super_fast;
+        break;
+      default:
+        increaser = score / Speed.super_fast;
+        break;
+    }
+    return increaser;
+  }, [score]);
+
   useEffect(() => {
     if (!game) {
       return;
@@ -214,7 +245,7 @@ const Ground = () => {
         default:
           break;
       }
-    }, speed);
+    }, speed - speedIncreaser);
 
     return () => {
       if (game) {
@@ -228,7 +259,7 @@ const Ground = () => {
         }
       }
     };
-  }, [game, direction, tail]);
+  }, [game, direction, speedIncreaser]);
 
   //Check if both Snake and apple get intersact
   if (appleMargins.left === marginLeft) {
@@ -236,7 +267,7 @@ const Ground = () => {
       setSnakeScale(1.2);
       setTimeout(() => {
         setSnakeScale(1);
-        setTail((prev) => [...prev, { left: marginLeft, top: marginTop }]);
+        // setSnake((prev) => [...prev, { left: marginLeft, top: marginTop }]);
       }, 100);
       const [left, top] = getRandomValues();
       setAppleMargins({
@@ -244,6 +275,7 @@ const Ground = () => {
         top: top,
       });
       setScore((prev) => prev + 50);
+      console.log(speedIncreaser);
     }
   }
 
@@ -258,35 +290,23 @@ const Ground = () => {
       >
         <div
           className="ground_snake"
-          style={{
-            width: snakeWidth,
-            height: snakeHeight,
-            marginTop: marginTop,
-            marginLeft: marginLeft,
-            scale: snakeScale,
-          }}
+          style={{ width: snakeWidth, height: snakeHeight }}
         >
-          <i
-            className="snake_head"
-            style={{
-              width: snakeWidth,
-              height: snakeHeight,
-            }}
-          />
+          {snake.map((item: ISnake, index: number) => {
+            return (
+              <Snake
+                direction={direction}
+                marginLeft={marginLeft}
+                marginTop={marginTop}
+                speed={speed}
+                snake={item}
+                key={index}
+                index={index}
+                scale={snakeScale}
+              />
+            );
+          })}
         </div>
-        {tail.map((item: ITail, index: number) => {
-          return (
-            <Tail
-              direction={direction}
-              marginLeft={marginLeft}
-              marginTop={marginTop}
-              speed={speed}
-              tail={tail}
-              key={index}
-            />
-          );
-        })}
-
         <div className="ground_buttons" onClick={onGameHandler}>
           {isGameOver && <span>Game Over</span>}
           {!game && !isGameOver && <span>Play</span>}

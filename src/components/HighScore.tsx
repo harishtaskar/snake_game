@@ -4,6 +4,7 @@ import "./index.scss";
 import { useRecoilValue } from "recoil";
 import { gameStatusAtom } from "@/state";
 import { FaShield } from "react-icons/fa6";
+import { PORT } from "@/config";
 
 type Score = {
   name: string;
@@ -16,12 +17,11 @@ const HighScore = () => {
   const [scorelist, setScoreList] = useState<Score[]>([]);
 
   const fetchScores = async () => {
-    const response = await fetch(`/api/score`, {
+    const response = await fetch(`${PORT}/scores`, {
       method: "GET",
     });
     const data = await response.json();
-    console.log(data);
-    setScoreList(data);
+    setScoreList(data.scores);
   };
 
   useEffect(() => {
@@ -45,18 +45,18 @@ const HighScore = () => {
                 <div className="div">
                   <span className="rank">{index + 1}</span>
                   <span className="name">{item.name}</span>
+                  {index < 3 && (
+                    <FaShield
+                      style={
+                        index === 0
+                          ? { color: "var(--gold)" }
+                          : index === 1
+                          ? { color: "var(--silver)" }
+                          : { color: "var(--bronze)" }
+                      }
+                    />
+                  )}
                 </div>
-                {index < 2 && (
-                  <FaShield
-                    style={
-                      index === 0
-                        ? { color: "var(--gold)" }
-                        : {} || index === 1
-                        ? { color: "var(--silver)" }
-                        : {} || { color: "var(--bronz)" }
-                    }
-                  />
-                )}
                 <div className="div">
                   <span className="score1">{item.score}</span>
                   <span className="speed1">{item.speed}</span>

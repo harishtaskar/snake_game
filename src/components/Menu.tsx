@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Speed, speedAtom, scoreAtom, userAtom, User } from "../state";
 import HighScore from "./HighScore";
 import { toast } from "react-toastify";
-
+import { PORT } from "@/config";
 
 type Props = {};
 
@@ -47,8 +47,11 @@ const Menu = ({}: Props) => {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       setTimeout(async () => {
-        const response = await fetch(`/api/score/new`, {
+        const response = await fetch(`${PORT}/score/new`, {
           method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
           body: JSON.stringify({
             name: user,
             speed: "slow",

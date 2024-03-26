@@ -12,19 +12,21 @@
     .ground_snake {
         position: absolute;
         width: fit-content;
-        // display: flex;
+        display: flex;
         // align-items: center;
         // justify-content: center;
         // flex-direction: row-reverse;
         z-index: 2;
+        gap: 1px;
         // transition: all 700ms ease-in-out;
 
         .snake_head {
             position: absolute;
-            display: flex;
+            display: block;
             // width: 30px;
             // height: 30px;
             background-color: var(--snake);
+            border: 1px solid var(--border);
             border-radius: 0px;
         }
 

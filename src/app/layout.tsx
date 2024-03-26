@@ -1,3 +1,4 @@
+require("dotenv").config();
 import type { Metadata } from "next";
 import { Days_One } from "next/font/google";
 import "./globals.scss";
